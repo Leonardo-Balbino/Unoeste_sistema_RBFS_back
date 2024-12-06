@@ -1,2 +1,2 @@
-import server from './server.js'
+console.log("Deus nos ajude")
 
