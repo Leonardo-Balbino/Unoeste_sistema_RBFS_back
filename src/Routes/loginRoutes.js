@@ -1,11 +1,11 @@
-// // routes/loginRoutes.js
+// routes/loginRoutes.js
 import { Router } from 'express';
-import LoginControl from '../Controller/loginControl.js'
+import LoginControl from '../Controller/loginControl.js';
 
 const loginRoutes = Router();
-const LoginEditControl = new LoginControl();
+const loginControlInstance = new LoginControl();
 
-loginRoutes.post('/login', LoginEditControl.login);
-loginRoutes.post('/register', LoginEditControl.register);
+loginRoutes.post('/login', (req, res) => loginControlInstance.login(req, res));
+loginRoutes.post('/register', (req, res) => loginControlInstance.register(req, res));
 
 export default loginRoutes;
