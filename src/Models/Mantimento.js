@@ -50,4 +50,14 @@ export default class Mantimento {
     const dao = new MantimentoDAO();
     return await dao.delete(id);
   }
+  
+  static async registrarMovimentacao(mantimento_id, tipo, quantidade) {
+    const dao = new MantimentoDAO();
+    return await dao.registrarMovimentacao(mantimento_id, tipo, quantidade);
+  }
+  
+  static async listarMovimentacoes(mantimento_id) {
+    const dao = new MantimentoDAO();
+    return await dao.listarMovimentacoes(mantimento_id);
+  }
 }

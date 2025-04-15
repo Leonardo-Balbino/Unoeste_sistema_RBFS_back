@@ -46,4 +46,30 @@ export default class MantimentoController {
       res.status(500).json({ erro: "Erro ao excluir mantimento." });
     }
   };
+
+  registrarMovimentacao = async (req, res) => {
+    const { id } = req.params;
+    const { tipo, quantidade } = req.body;
+  
+    if (!['entrada', 'saida'].includes(tipo) || !quantidade) {
+      return res.status(400).json({ erro: "Dados inválidos para movimentação." });
+    }
+  
+    try {
+      const resultado = await Mantimento.registrarMovimentacao(id, tipo, quantidade);
+      res.status(200).json(resultado);
+    } catch (error) {
+      res.status(500).json({ erro: "Erro ao registrar movimentação." });
+    }
+  };
+  
+  listarMovimentacoes = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const movimentacoes = await Mantimento.listarMovimentacoes(id);
+      res.status(200).json(movimentacoes);
+    } catch (error) {
+      res.status(500).json({ erro: "Erro ao listar movimentações." });
+    }
+  };
 }

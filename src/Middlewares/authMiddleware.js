@@ -1,7 +1,12 @@
-// middlewares/authMiddleware.js
+// src/Middlewares/authMiddleware.js
 import { VerifyToken } from '../security/functionsJWT.js';
 
 export default function authMiddleware(req, res, next) {
+  // Se a rota começa com /auth, não exige token
+  if (req.path.startsWith('/auth')) {
+    return next();
+  }
+
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(401).json({ status: false, mensagem: "Acesso negado. Token não fornecido." });

@@ -1,46 +1,33 @@
 // Database/connection.js
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
 import 'dotenv/config';
 
-const {
-  DB_HOST,
-  DB_USER,
-  DB_PASS,
-  DB_NAME,
-  DB_PORT,
-} = process.env;
+const { DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT } = process.env;
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
   host: DB_HOST || 'localhost',
   user: DB_USER || 'root',
   port: DB_PORT || 3306,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
-
-connection.connect((err) => {
-  if (err) {
-    console.error('Erro ao conectar ao MySQL:', err);
-    return;
-  }
-  console.log('Conexão MySQL estabelecida!');
-
-  // Cria a database se não existir
-  connection.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\``, (err) => {
-    if (err) {
-      console.error('Erro ao criar/verificar a database:', err);
-      return;
-    }
-    console.log(`Banco de dados "${DB_NAME}" verificado/criado com sucesso!`);
-
-    // Seleciona a database
-    connection.query(`USE \`${DB_NAME}\``, (err) => {
-      if (err) {
-        console.error(`Erro ao selecionar a database "${DB_NAME}":`, err);
-        return;
-      }
-      console.log(`Usando a database "${DB_NAME}"`);
+// Criação da database (caso não exista)
+(async () => {
+  try {
+    const connection = await mysql.createConnection({
+      host: DB_HOST || 'localhost',
+      user: DB_USER || 'root',
+      password: DB_PASS || '',
+      port: DB_PORT || 3306,
     });
-  });
-});
+    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\``);
+    console.log(`Banco de dados "${DB_NAME}" verificado/criado com sucesso!`);
+    await connection.end();
+  } catch (err) {
+    console.error("Erro ao criar/verificar database:", err.message);
+  }
+})();
 
-export default connection;
+export default pool;

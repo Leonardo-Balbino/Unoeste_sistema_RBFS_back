@@ -29,57 +29,44 @@ export default class LoginDAO {
   }
 
   /**
-   * Cria um novo usuário no banco de dados.
-   * @param {object} userData - Objeto contendo: username, email, password e role.
-   * @returns {Promise<object>} Dados do usuário criado.
-   */
-  async createUser({ username, email, password, role = 'user' }) {
-    return new Promise((resolve, reject) => {
-      // Depure o valor da senha:
-      console.log('Criando usuário com senha:', password);
-
-      if (!password) {
-        return reject(new Error("A senha não foi informada."));
-      }
-
-      bcrypt.hash(password, 10, (err, hash) => {
-        if (err) return reject(err);
-
-        const sql = 'INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)';
-        db.query(sql, [username, email, hash, role], (err, result) => {
-          if (err) return reject(err);
-          resolve({ id: result.insertId, username, email, role });
-        });
-      });
-    });
-  }
-
-  /**
-   * Realiza o login do usuário.
+   * Realiza o login de um usuário utilizando async/await.
    * @param {string} username 
    * @param {string} password 
-   * @returns {Promise<object|null>}
+   * @returns {Promise<object|null>} Retorna o usuário se as credenciais estiverem corretas ou null caso contrário.
    */
   async login(username, password) {
-    return new Promise((resolve, reject) => {
-      const sql = 'SELECT * FROM users WHERE username = ? LIMIT 1';
-      db.query(sql, [username], async (err, results) => {
-        if (err) return reject(err);
+    try {
+      // Usamos a pool Promise do mysql2, logo db.query já retorna uma Promise
+      const [rows] = await db.query("SELECT * FROM users WHERE username = ? LIMIT 1", [username]);
+      
+      if (!rows || rows.length === 0) {
+        return null;
+      }
+      
+      const user = rows[0];
+      
+      // Compara a senha recebida com o hash armazenado
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        return null;
+      }
+      
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-        if (!results || results.length === 0) {
-          return resolve(null);
-        }
-
-        const user = results[0];
-
-        try {
-          const match = await bcrypt.compare(password, user.password);
-          if (!match) return resolve(null);
-          resolve(user);
-        } catch (error) {
-          reject(error);
-        }
-      });
-    });
+  async createUser({ username, email, password, role = 'user' }) {
+    try {
+      const hash = await bcrypt.hash(password, 10);
+      const [result] = await db.query(
+        "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)",
+        [username, email, hash, role]
+      );
+      return { id: result.insertId, username, email, role };
+    } catch (error) {
+      throw error;
+    }
   }
 }
