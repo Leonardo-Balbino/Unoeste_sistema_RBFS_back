@@ -8,10 +8,14 @@ const pool = mysql.createPool({
   host: DB_HOST || 'localhost',
   user: DB_USER || 'root',
   port: DB_PORT || 3306,
+  database: DB_NAME || 'RBFS_database', 
+  password: DB_PASS || '', // Guga apaga essa linha se presisar
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
 });
+
+// console.log("pool22", pool)
 
 // Criação da database (caso não exista)
 (async () => {
@@ -19,6 +23,7 @@ const pool = mysql.createPool({
     const connection = await mysql.createConnection({
       host: DB_HOST || 'localhost',
       user: DB_USER || 'root',
+      database: DB_NAME || 'RBFS_database', 
       password: DB_PASS || '',
       port: DB_PORT || 3306,
     });
