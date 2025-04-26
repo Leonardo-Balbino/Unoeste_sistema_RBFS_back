@@ -9,19 +9,33 @@ export default class MantimentoDAO {
   async createTable() {
     try {
       await db.execute(`
+        CREATE TABLE IF NOT EXISTS mantimentos (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          nome VARCHAR(255) NOT NULL,
+          quantidade INT NOT NULL,
+          validade DATE NOT NULL,
+          unidade_medida VARCHAR(50),
+          descricao TEXT
+        ) ENGINE=InnoDB;
+      `);
+  
+  
+      await db.execute(`
         CREATE TABLE IF NOT EXISTS movimentacoes_mantimentos (
           id INT AUTO_INCREMENT PRIMARY KEY,
           mantimento_id INT NOT NULL,
-          tipo ENUM('entrada', 'saida') NOT NULL,
+          tipo ENUM('entrada','saida') NOT NULL,
           quantidade INT NOT NULL,
           data_movimentacao DATETIME DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (mantimento_id) REFERENCES mantimentos(id)
-        )
+          FOREIGN KEY (mantimento_id)
+            REFERENCES mantimentos(id)
+            ON DELETE CASCADE
+        ) ENGINE=InnoDB;
       `);
-      
-      console.log("Tabela 'mantimentos' verificada/criada com sucesso.");
+  
+      console.log("Tabelas 'mantimentos' e 'movimentacoes_mantimentos' verificadas/criadas com sucesso.");
     } catch (error) {
-      console.error("Erro ao criar tabela 'mantimentos':", error.message);
+      console.error("Erro ao criar tabelas:", error.message);
     }
   }
 
@@ -30,12 +44,12 @@ export default class MantimentoDAO {
     return rows;
   }
 
-  async create({ nome, quantidade, validade }) {
+  async create({ nome, quantidade, validade, unidade_medida, descricao }) {
     const [result] = await db.query(
-      "INSERT INTO mantimentos (nome, quantidade, validade) VALUES (?, ?, ?)",
-      [nome, quantidade, validade]
+      "INSERT INTO mantimentos (nome, quantidade, validade, unidade_medida, descricao) VALUES (?, ?, ?, ?, ?)",
+      [nome, quantidade, validade, unidade_medida, descricao]
     );
-    return { id: result.insertId, nome, quantidade, validade };
+    return { id: result.insertId, nome, quantidade, validade, unidade_medida, descricao };
   }
 
   async update(id, { nome, quantidade, validade, unidade_medida, descricao }) {

@@ -9,6 +9,9 @@ import animalRoutes from './Routes/animalRoutes.js';
 import adotanteRoutes from './Routes/adotanteRoutes.js';
 import authMiddleware from './Middlewares/authMiddleware.js';
 import adocaoRoutes from './Routes/adocaoRoutes.js';
+import financeiroRoutes from './Routes/financeiroRoutes.js';
+import consultaRoutes from './Routes/consultaRoutes.js';
+import estoqueRoutes from './Routes/estoqueRoutes.js';
 
 const router = Router();
 
@@ -23,5 +26,8 @@ router.use('/voluntarios', authMiddleware, voluntarioRoutes);
 router.use('/animais', authMiddleware, animalRoutes);
 router.use('/adotantes', authMiddleware, adotanteRoutes);
 router.use('/adocoes', authMiddleware, adocaoRoutes);
+router.use('/financeiro', authMiddleware, financeiroRoutes);
+router.use('/consultas', authMiddleware, consultaRoutes);
+router.use('/estoque', authMiddleware, estoqueRoutes);
 
 export default router;
