@@ -4,16 +4,27 @@ import 'dotenv/config';
 
 const { DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT } = process.env;
 
-const pool = mysql.createPool({
-  host: DB_HOST || 'localhost',
-  user: DB_USER || 'root',
-  port: DB_PORT || 3306,
-  database: DB_NAME || 'RBFS_database', 
-  password: DB_PASS || '', // Guga apaga essa linha se presisar
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
+class Database {
+  static instance;
+
+  constructor() {
+    if (!Database.instance) {
+      Database.instance = mysql.createPool({
+        host: DB_HOST || 'localhost',
+        user: DB_USER || 'root',
+        port: DB_PORT || 3306,
+        database: DB_NAME || 'RBFS_database',
+        password: DB_PASS || '',
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0,
+      });
+    }
+    return Database.instance;
+  }
+}
+
+const pool = new Database();
 
 // console.log("pool22", pool)
 
