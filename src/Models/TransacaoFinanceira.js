@@ -1,4 +1,4 @@
-import FinanceiroDAO from '../dao/FinanceiroDAO.js';
+import FinanceiroDAO from '../DAO/FinanceiroDAO.js';
 
 export default class TransacaoFinanceira {
   #tipo;        // 'doacao' ou 'compra'

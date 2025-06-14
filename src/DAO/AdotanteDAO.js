@@ -8,7 +8,7 @@ export default class AdotanteDAO {
 
   async createTable() {
     try {
-      await db.execute(`
+      await db.query(`
         CREATE TABLE IF NOT EXISTS adotantes (
           id INT AUTO_INCREMENT PRIMARY KEY,
           nome VARCHAR(255) NOT NULL,

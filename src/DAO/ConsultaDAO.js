@@ -7,7 +7,7 @@ export default class ConsultaDAO {
 
   async createTable() {
     try {
-      await db.execute(`
+      await db.query(`
         CREATE TABLE IF NOT EXISTS consultas (
           id INT AUTO_INCREMENT PRIMARY KEY,
           data DATE NOT NULL,

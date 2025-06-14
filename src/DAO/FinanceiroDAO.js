@@ -5,15 +5,12 @@ export default class FinanceiroDAO {
   static _tabelasCriadas = false;
 
   constructor() {
-    if (!FinanceiroDAO._tabelasCriadas) {
-      this._createTable();
-      FinanceiroDAO._tabelasCriadas = true;
-    }
+    this.createTable();
   }
 
-  async _createTable() {
+  async createTable() {
     try {
-      await db.execute(`
+      await db.query(`
         CREATE TABLE IF NOT EXISTS transacoes_financeiras (
           id INT AUTO_INCREMENT PRIMARY KEY,
           tipo ENUM('doacao','compra') NOT NULL,

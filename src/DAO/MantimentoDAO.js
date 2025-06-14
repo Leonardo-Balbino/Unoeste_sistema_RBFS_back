@@ -8,7 +8,7 @@ export default class MantimentoDAO {
 
   async createTable() {
     try {
-      await db.execute(`
+      await db.query(`
         CREATE TABLE IF NOT EXISTS mantimentos (
           id INT AUTO_INCREMENT PRIMARY KEY,
           nome VARCHAR(255) NOT NULL,
@@ -20,7 +20,7 @@ export default class MantimentoDAO {
       `);
   
   
-      await db.execute(`
+      await db.query(`
         CREATE TABLE IF NOT EXISTS movimentacoes_mantimentos (
           id INT AUTO_INCREMENT PRIMARY KEY,
           mantimento_id INT NOT NULL,

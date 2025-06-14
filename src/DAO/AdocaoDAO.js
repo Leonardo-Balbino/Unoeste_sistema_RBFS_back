@@ -8,7 +8,7 @@ export default class AdocaoDAO {
 
   async createTable() {
     try {
-      await db.execute(`
+      await db.query(`
         CREATE TABLE IF NOT EXISTS adocoes (
           id INT AUTO_INCREMENT PRIMARY KEY,
           animal_id INT NOT NULL,

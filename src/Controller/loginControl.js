@@ -1,5 +1,5 @@
 // controllers/loginControl.js
-import Login from '../models/login.js';
+import Login from '../Models/login.js';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 
