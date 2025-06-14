@@ -4,6 +4,8 @@ import cors from 'cors';
 import 'dotenv/config';
 import mainRouter from './src/index.js';
 
+const relatorioRouter = require('./routes/relatorio');
+app.use('/relatorio-animais', relatorioRouter);
 const app = express();
 const PORT = process.env.PORT || 9000;
 
