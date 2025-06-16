@@ -21,7 +21,11 @@ export default class AdotanteController {
       const adotanteCriado = await Adotante.create(novoAdotante);
       res.status(201).json(adotanteCriado);
     } catch (error) {
-      res.status(500).json({ erro: "Erro ao cadastrar adotante." });
+      if (error.code === 'ER_DUP_ENTRY') {
+        res.status(400).json({ erro: "E-mail já cadastrado." });
+      } else {
+        res.status(500).json({ erro: "Erro ao cadastrar adotante." });
+      }
     }
   };
 

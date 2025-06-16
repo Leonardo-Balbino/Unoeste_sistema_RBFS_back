@@ -1,9 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const Animal = require('../models/Animal'); // Altere o caminho se necessário
+
+import { Router } from 'express';
+import Animal from '../Models/Animal.js'; // Ajuste o caminho se necessário
+
+const relatorioRouter = Router();
 
 // GET /relatorio-animais
-router.get('/', async (req, res) => {
+relatorioRouter.get('/', async (req, res) => {
   try {
     const { especie, sexo, status } = req.query;
 
@@ -12,7 +14,8 @@ router.get('/', async (req, res) => {
     if (sexo) filtros.sexo = sexo;
     if (status) filtros.status = status;
 
-    const animais = await Animal.find(filtros).sort({ dataEntrada: -1 });
+    // Ajuste conforme seu ORM/DAO. Exemplo usando um método estático:
+    const animais = await Animal.list(filtros);
 
     res.json(animais);
   } catch (err) {
@@ -21,4 +24,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default relatorioRouter;

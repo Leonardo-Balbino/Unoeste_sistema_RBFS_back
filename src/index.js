@@ -12,6 +12,9 @@ import adocaoRoutes from './Routes/adocaoRoutes.js';
 import financeiroRoutes from './Routes/financeiroRoutes.js';
 import consultaRoutes from './Routes/consultaRoutes.js';
 import estoqueRoutes from './Routes/estoqueRoutes.js';
+import relatorioRouter from './Routes/relatorio.js';
+import saudeAnimalRoutes from './Routes/saudeAnimalRoutes.js';
+
 
 const router = Router();
 
@@ -29,5 +32,7 @@ router.use('/adocoes', authMiddleware, adocaoRoutes);
 router.use('/financeiro', authMiddleware, financeiroRoutes);
 router.use('/consultas', authMiddleware, consultaRoutes);
 router.use('/estoque', authMiddleware, estoqueRoutes);
+router.use('/relatorio-animais', relatorioRouter);
+router.use('/saude-animais', authMiddleware, saudeAnimalRoutes);
 
 export default router;

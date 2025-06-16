@@ -12,12 +12,12 @@ export default class VacinaController {
   };
 
   create = async (req, res) => {
-    const { nome, tipo, fabricante, lote, dados_fabricacao, validade } = req.body;
-    if (!nome || !tipo || !fabricante || !lote || !dados_fabricacao || !validade) {
+    const { animal_id, nome, tipo, fabricante, lote, dados_fabricacao, validade } = req.body;
+    if (!animal_id || !nome || !tipo || !fabricante || !lote || !dados_fabricacao || !validade) {
       return res.status(400).json({ erro: "Todos os campos são obrigatórios." });
     }
     try {
-      const novaVacina = new Vacina(nome, tipo, fabricante, lote, dados_fabricacao, validade);
+      const novaVacina = new Vacina(animal_id, nome, tipo, fabricante, lote, dados_fabricacao, validade);
       const vacinaCriada = await Vacina.create(novaVacina);
       res.status(201).json(vacinaCriada);
     } catch (error) {

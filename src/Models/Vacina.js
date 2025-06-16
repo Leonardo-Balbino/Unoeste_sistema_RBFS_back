@@ -1,7 +1,9 @@
 // models/Vacina.js
 import VacinaDAO from '../DAO/VacinaDAO.js';
 
+
 export default class Vacina {
+  #animal_id;
   #nome;
   #tipo;
   #fabricante;
@@ -9,7 +11,8 @@ export default class Vacina {
   #dados_fabricacao;
   #validade;
 
-  constructor(nome, tipo, fabricante, lote, dados_fabricacao, validade) {
+  constructor(animal_id, nome, tipo, fabricante, lote, dados_fabricacao, validade) {
+    this.#animal_id = animal_id;
     this.#nome = nome;
     this.#tipo = tipo;
     this.#fabricante = fabricante;
@@ -18,15 +21,9 @@ export default class Vacina {
     this.#validade = validade;
   }
 
-  get nome() { return this.#nome; }
-  get tipo() { return this.#tipo; }
-  get fabricante() { return this.#fabricante; }
-  get lote() { return this.#lote; }
-  get dados_fabricacao() { return this.#dados_fabricacao; }
-  get validade() { return this.#validade; }
-
   toInsertObject() {
     return {
+      animal_id: this.#animal_id,
       nome: this.#nome,
       tipo: this.#tipo,
       fabricante: this.#fabricante,
